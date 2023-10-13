@@ -1,19 +1,22 @@
 using System;
 using System.Collections.Generic;
 using Command;
+using Extension.Singleton;
 using IState;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Singleton<Player>
 {
     private IStatePlayer state;
     [TextArea] public string State;
 
-    private bool isDisable = false;
     [SerializeField] private GameObject Light;
     private Rigidbody2D Rigidbody2D;
 
     private Dictionary<string, IStatePlayer> listState;
+
+    public Action<float> OnScaleChangeScaleX;
+    private float scaleX;
 
     #region Test State Pattern
 
@@ -54,10 +57,11 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (scaleX != transform.localScale.x)
         {
-            isDisable = !isDisable;
-            Light.SetActive(isDisable);
+            scaleX = transform.localScale.x;
+            OnScaleChangeScaleX?.Invoke(scaleX);
+
         }
     }
 
