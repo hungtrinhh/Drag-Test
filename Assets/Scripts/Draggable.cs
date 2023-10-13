@@ -7,7 +7,20 @@ public class Draggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDra
 {
     [SerializeField] private Camera _camera;
     private Vector3 distanceFromMouse;
-    public static Transform Parent;
+
+    public static Transform Parent
+    {
+        get => _parent;
+        set
+        {
+            OnParentChange?.Invoke();
+            _parent = value;
+        }
+    }
+
+
+    private static Transform _parent;
+    public static Action OnParentChange;
     [SerializeField] private Image _image;
 
     private void Awake()
